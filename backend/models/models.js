@@ -16,7 +16,14 @@ const Event = sequelize.define("event", {
   },
   name: { type: DataTypes.STRING },
   long: { type: DataTypes.INTEGER, allowNull: false },
-  lat: { type: DataTypes.INTEGER, allowNull: false },
+  lat: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    validate: {
+      max: 90,
+      min: -90,
+    },
+  },
   img: { type: DataTypes.STRING },
   desc: { type: DataTypes.STRING },
   time: { type: DataTypes.INTEGER },
