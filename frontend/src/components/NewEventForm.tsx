@@ -1,11 +1,20 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { DatePicker, ClockPicker } from "@mui/x-date-pickers";
-import { TextField } from "@mui/material";
+import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+// import Calendar from "react-calendar";
+import moment from "moment";
+import { TextField, Box } from "@mui/material";
+import { useAppDispatch } from "../hooks/reduxHook";
+import { openLocationInfo } from "../store/modalSlice";
+import { addEventInfo } from "../store/newEventSlice";
+import Event from "../interfaces/EventSliceInterface";
 
 import "react-datepicker/dist/react-datepicker.css";
+// import "react-calendar/dist/Calendar.css";
 
-const NewEventFormDiv = styled.div``;
+const NewEventFormDiv = styled.div`
+  position: relative;
+`;
 
 const Form = styled.form`
   display: flex;
@@ -19,6 +28,16 @@ const Input = styled.input`
   background-color: rgba(230, 230, 230, 0.3);
   padding: 10px;
   outline: none;
+`;
+const InputBlock = styled.div`
+  background-color: rgba(230, 230, 230, 0.3);
+  display: flex;
+  align-items: center;
+  width: 220px;
+  border-radius: 20px;
+  height: 50px;
+  margin-bottom: 10px;
+  margin-right: 10px;
 `;
 
 const Label = styled.label`
@@ -37,29 +56,102 @@ const Textarea = styled.textarea`
   outline: none;
 `;
 
+const PickerBlock = styled.div`
+  display: flex;
+`;
+
+const PickerInput = styled.input`
+  border: none;
+  border-radius: 20px;
+  background-color: transparent;
+  padding: 10px;
+  outline: none;
+`;
+
+const Button = styled.input`
+  background-color: black;
+  border-radius: 20px;
+  width: 40%;
+  padding: 10px;
+  color: white;
+  margin: 30px auto 20px auto;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const TextFieldStyled = styled(TextField)``;
 // const WrapperDatePicker = styled(DatePicker)`
 //   display: none;
 // `;
 
 const NewEventForm: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedTime, setSelectedTime] = useState<Date | null>(new Date());
+  const [eventData, setEventData] = useState<Event>();
+  const [name, setName] = useState<Event["name"]>("");
+  const [desc, setDesc] = useState<Event["desc"]>("");
+
+  const dispatch = useAppDispatch();
+  let date = moment(selectedDate).format("DD/MM/YYYY");
+  let time = moment(selectedTime).format("h:mm");
+
   return (
     <NewEventFormDiv>
       <Form>
         <Label>Title</Label>
-        <Input placeholder="Введите название ивента"></Input>
-        <Label>Описание</Label>
-        <Textarea placeholder="Введите описание ивента"></Textarea>
-        <Label>Время</Label>
-        <DatePicker
-          value={selectedDate}
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(newValue) => {
-            setSelectedDate(newValue);
-          }}
-          // disableOpenPicker={true}
+        <Input
+          placeholder="Введите название ивента"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
-        {/* тзь ыефк */}
+        <Label>Описание</Label>
+        <Textarea
+          placeholder="Введите описание ивента"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        ></Textarea>
+        <Label>Время</Label>
+        <PickerBlock>
+          <DatePicker
+            value={selectedDate}
+            renderInput={({ inputRef, inputProps, InputProps }) => (
+              <InputBlock>
+                <PickerInput ref={inputRef} {...inputProps} />
+                {InputProps?.endAdornment}
+              </InputBlock>
+            )}
+            onChange={(newValue) => {
+              setSelectedDate(newValue);
+            }}
+            // disableOpenPicker={true}
+          />
+          {/* <Calendar value={selectedDate} onChange={setSelectedDate} /> */}
+          <TimePicker
+            value={selectedTime}
+            onChange={(newValue) => {
+              setSelectedTime(newValue);
+            }}
+            ampm={false}
+            renderInput={({ inputRef, inputProps, InputProps }) => (
+              <InputBlock>
+                <PickerInput ref={inputRef} {...inputProps} />
+                {InputProps?.endAdornment}
+              </InputBlock>
+            )}
+          />
+        </PickerBlock>
+
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(addEventInfo({ name, desc, date, time }));
+            dispatch(openLocationInfo());
+          }}
+          type={"submit"}
+          value={"Выберите местоположение ивента"}
+        ></Button>
       </Form>
     </NewEventFormDiv>
   );

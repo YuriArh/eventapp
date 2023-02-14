@@ -26,7 +26,8 @@ const Event = sequelize.define("event", {
   },
   img: { type: DataTypes.STRING },
   desc: { type: DataTypes.STRING },
-  time: { type: DataTypes.INTEGER },
+  time: { type: DataTypes.STRING },
+  date: { type: DataTypes.STRING },
 });
 
 // const EventInfo = sequelize.define("event_info", {

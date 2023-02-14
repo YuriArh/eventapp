@@ -4,6 +4,7 @@ import styled from "styled-components";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { getEvents } from "../store/eventsSlice";
+import { addEventLocale } from "../store/newEventSlice";
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 import { Viewport, NewEvent } from "../interfaces/MyMapInterface";
@@ -23,6 +24,7 @@ const MyMap = () => {
   const token: string | undefined = process.env.REACT_APP_MAPBOX_TOKEN;
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.events.data);
+  const locationInfo = useAppSelector((state) => state.modal.locationInfo);
 
   const [popupID, setPopupID] = useState<string>("");
   const [newEvent, setNewEvent] = useState<NewEvent | null>(null);
@@ -33,15 +35,13 @@ const MyMap = () => {
   });
 
   const handleAddClick = (e: any) => {
-    const lng = e.lngLat.lng;
-    const lat = e.lngLat.lat;
-
-    setPopupID("");
-
-    setNewEvent({
-      latitude: lat,
-      longitude: lng,
-    });
+    if (locationInfo) {
+      const long = e.lngLat.lng;
+      const lat = e.lngLat.lat;
+      dispatch(addEventLocale({ long, lat }));
+    } else {
+      return;
+    }
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const MyMap = () => {
       onDblClick={(e) => handleAddClick(e)}
     >
       <GeolocateControl trackUserLocation={true} />
-      {data.map((event) => {
+      {data?.map((event) => {
         return (
           <>
             <Marker

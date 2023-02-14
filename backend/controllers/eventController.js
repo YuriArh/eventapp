@@ -9,6 +9,7 @@ class EventController {
       const { name, long, lat, info } = req.body;
       const desc = req.body.desc ? req.body.desc : null;
       const time = req.body.time ? req.body.time : null;
+      const date = req.body.date ? req.body.date : null;
 
       const createEvent = async (info) => {
         await Event.create(info);
@@ -26,9 +27,10 @@ class EventController {
           img: filename,
           desc,
           time,
+          date,
         });
       } else {
-        createEvent({ eventId: uuid.v4(), name, long, lat, desc, time });
+        createEvent({ eventId: uuid.v4(), name, long, lat, desc, time, date });
       }
 
       // const event = await Event.create({ name, long, lat, img: filename});
@@ -38,6 +40,7 @@ class EventController {
         EventInfo.create({
           desc: info.desc,
           time: info.time,
+          date: info.date,
           eventId: createEvent.id,
         });
         // info.forEach((i) =>

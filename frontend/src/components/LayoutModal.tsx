@@ -4,8 +4,9 @@ import { useAppDispatch } from "../hooks/reduxHook";
 import { LayoutModalProps } from "../interfaces/LayoutModalInterfaces";
 import closeIcon from "../icons/closeIcon.svg";
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Modal = styled.div`
+const Modal = styled(motion.div)`
   position: fixed;
   display: block;
 
@@ -21,14 +22,12 @@ const Modal = styled.div`
   transition: background-color 2s;
 `;
 
-const ModalFrame = styled.div`
+const ModalFrame = styled(motion.div)`
   position: relative;
   background: #ffffff;
   margin: auto auto;
   border-radius: 10px;
   overflow: hidden;
-  vertical-align: middle;
-  top: 15%;
   min-height: 50%;
   box-shadow: 2px 5px 10px rgb(0 0 0 / 5%);
   max-width: 720px;
@@ -40,7 +39,7 @@ const ContentHead = styled.div`
   justify-content: flex-end;
 `;
 
-const Button = styled.div`
+const CloseButton = styled.div`
   margin: 5px;
 `;
 const ModalContent = styled.div``;
@@ -53,6 +52,11 @@ const Img = styled.img`
 const LayoutModal = (props: LayoutModalProps) => {
   const frame = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
+
+  const variants = {
+    modal: {},
+    locationInfo: {},
+  };
 
   const onModal = (e: MouseEvent<HTMLDivElement>) => {
     dispatch(closeModal());
@@ -73,13 +77,19 @@ const LayoutModal = (props: LayoutModalProps) => {
   //   });
 
   return (
-    <Modal onClick={(e) => onModal(e)}>
-      <ModalFrame ref={frame} onClick={(e) => e.stopPropagation()}>
+    <Modal onClick={(e) => onModal(e)} exit={{ opacity: 0 }}>
+      <ModalFrame
+        // ref={frame}
+        exit={{ opacity: 1 }}
+        onClick={(e) => e.stopPropagation()}
+        animate={{ y: "25%" }}
+        variants={variants}
+      >
         <ContentHead>
           {/* {props.title} */}
-          <Button onClick={() => dispatch(closeModal())}>
+          <CloseButton onClick={() => dispatch(closeModal())}>
             <Img src={closeIcon} alt="close" />
-          </Button>
+          </CloseButton>
         </ContentHead>
         <ModalContent>{props.children}</ModalContent>
       </ModalFrame>

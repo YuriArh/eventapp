@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import Event from "../interfaces/EventSliceInterface";
 import axios from "axios";
 
-export const getEvents = createAsyncThunk("pics/getEvents", async () => {
+export const getEvents = createAsyncThunk("events/getEvents", async () => {
   try {
     const response = await axios.get("http://localhost:5000/api/event/");
     return response.data;
@@ -9,16 +10,6 @@ export const getEvents = createAsyncThunk("pics/getEvents", async () => {
     console.error(error);
   }
 });
-
-type Event = {
-  eventId: string;
-  name: string;
-  long: number;
-  lat: number;
-  img: string;
-  desc: string;
-  time: number;
-};
 
 type eventsState = {
   data: Event[];
