@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { openModal, closeModal } from "../store/modalSlice";
+import { openModal, closeModal } from "../redux/features/modalSlice";
 import plusIcon2 from "../icons/plusIcon2.svg";
 import { useAppDispatch } from "../hooks/reduxHook";
 import { motion } from "framer-motion";
@@ -13,7 +13,7 @@ const StyledButton = styled(motion.button)`
   font-size: 24px;
   position: fixed;
   z-index: 1;
-  right: 48%;
+  right: 48.5%;
   bottom: 0;
   color: white;
   border: 1px solid white;

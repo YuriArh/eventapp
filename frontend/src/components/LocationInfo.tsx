@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-import { closeLocationInfo } from "../store/modalSlice";
-import { useAppDispatch } from "../hooks/reduxHook";
+import { closeLocationInfo } from "../redux/features/modalSlice";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 
 import okIcon from "../icons/ok_icon.svg";
 
@@ -47,8 +47,19 @@ const Img = styled.img`
   color: white;
 `;
 
-const LocationInfo = () => {
+type Props = {
+  onLocationButton: () => void;
+};
+
+const LocationInfo = (props: Props) => {
   const dispatch = useAppDispatch();
+  const locale = useAppSelector((state) => state.locale.locale);
+
+  const handleClick = () => {
+    dispatch(closeLocationInfo());
+    props.onLocationButton();
+  };
+
   return (
     <Div
       initial={{ y: "50px" }}
@@ -57,9 +68,13 @@ const LocationInfo = () => {
       transition={{ ease: "easeInOut" }}
     >
       <Content>
-        <Input type="text" value={"выберите локацию"} readOnly />
+        <Input
+          type="text"
+          value={locale ? locale : "выберите локацию клкикнув 2 раза по карте"}
+          readOnly
+        />
         <Button
-          onClick={() => dispatch(closeLocationInfo())}
+          onClick={() => handleClick()}
           whileHover={{ scale: 1.2 }}
           transition={{ duration: 0.3 }}
         >

@@ -5,11 +5,10 @@ import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import moment from "moment";
 import { TextField, Box } from "@mui/material";
 import { useAppDispatch } from "../hooks/reduxHook";
-import { openLocationInfo } from "../store/modalSlice";
-import { addEventInfo } from "../store/newEventSlice";
+import { openLocationInfo } from "../redux/features/modalSlice";
+import { addEventInfo } from "../redux/features/newEventSlice";
 import Event from "../interfaces/EventSliceInterface";
 
-import "react-datepicker/dist/react-datepicker.css";
 // import "react-calendar/dist/Calendar.css";
 
 const NewEventFormDiv = styled.div`
@@ -95,7 +94,7 @@ const NewEventForm: React.FC = () => {
 
   const dispatch = useAppDispatch();
   let date = moment(selectedDate).format("DD/MM/YYYY");
-  let time = moment(selectedTime).format("h:mm");
+  let time = moment(selectedTime).format("LT");
 
   return (
     <NewEventFormDiv>

@@ -1,20 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import LocaleState from "../interfaces/LocaleStateIntreface";
-import axios from "axios";
-
-export const getLocale = createAsyncThunk(
-  "event/getLocale",
-  async (long, lat) => {
-    try {
-      const response = await axios.get(
-        `ttps://api.mapbox.com/geocoding/v5/mapbox.places}/${long},${lat}.json`
-      );
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import LocaleState from "../../interfaces/LocaleStateIntreface";
+import { getLocale } from "../api/getLocaleApi";
 
 const initialState: LocaleState = {
   locale: "",
@@ -33,7 +19,7 @@ const localeSlice = createSlice({
         state.hasError = false;
       })
       .addCase(getLocale.fulfilled, (state, action) => {
-        state.locale = action.payload;
+        state.locale = action.payload.features[0].place_name;
         state.isLoading = false;
         state.hasError = false;
       })

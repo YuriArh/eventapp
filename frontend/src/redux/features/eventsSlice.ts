@@ -1,15 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Event from "../interfaces/EventSliceInterface";
-import axios from "axios";
-
-export const getEvents = createAsyncThunk("events/getEvents", async () => {
-  try {
-    const response = await axios.get("http://localhost:5000/api/event/");
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
-});
+import { createSlice } from "@reduxjs/toolkit";
+import Event from "../../interfaces/EventSliceInterface";
+import { getEvents } from "../api/getApi";
 
 type eventsState = {
   data: Event[];

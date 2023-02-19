@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import eventsReducer from "./eventsSlice";
-import modalReducer from "./modalSlice";
-import newEventReducer from "./newEventSlice";
-import localeReducer from "./localeSlice";
+import eventsReducer from "./features/eventsSlice";
+import modalReducer from "./features/modalSlice";
+import newEventReducer from "./features/newEventSlice";
+import localeReducer from "./features/localeSlice";
 
 export const store = configureStore({
   reducer: {

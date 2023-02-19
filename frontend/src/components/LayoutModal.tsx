@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, MouseEvent } from "react";
-import { closeModal } from "../store/modalSlice";
+import { closeModal } from "../redux/features/modalSlice";
 import { useAppDispatch } from "../hooks/reduxHook";
 import { LayoutModalProps } from "../interfaces/LayoutModalInterfaces";
 import closeIcon from "../icons/closeIcon.svg";
@@ -25,10 +25,9 @@ const Modal = styled(motion.div)`
 const ModalFrame = styled(motion.div)`
   position: relative;
   background: #ffffff;
-  margin: auto auto;
+  margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
-  min-height: 50%;
   box-shadow: 2px 5px 10px rgb(0 0 0 / 5%);
   max-width: 720px;
   z-index: 3;
@@ -82,7 +81,7 @@ const LayoutModal = (props: LayoutModalProps) => {
         // ref={frame}
         exit={{ opacity: 1 }}
         onClick={(e) => e.stopPropagation()}
-        animate={{ y: "25%" }}
+        animate={{ y: "50%" }}
         variants={variants}
       >
         <ContentHead>

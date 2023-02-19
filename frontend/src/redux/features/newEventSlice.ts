@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { NewEvent } from "../interfaces/NewEventInterface";
+import { NewEvent } from "../../interfaces/NewEventInterface";
+import { createEvent } from "../api/postApi";
 
 const initialState: NewEvent = {};
 
@@ -19,6 +20,11 @@ const newEventSlice = createSlice({
       state.long = long;
       state.lat = lat;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(createEvent.fulfilled, (state, action) => {
+      state.isPosting = true;
+    });
   },
 });
 

@@ -15,14 +15,10 @@ const Event = sequelize.define("event", {
     primaryKey: true,
   },
   name: { type: DataTypes.STRING },
-  long: { type: DataTypes.INTEGER, allowNull: false },
+  long: { type: DataTypes.FLOAT, allowNull: false },
   lat: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
-    validate: {
-      max: 90,
-      min: -90,
-    },
   },
   img: { type: DataTypes.STRING },
   desc: { type: DataTypes.STRING },

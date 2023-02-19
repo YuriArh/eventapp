@@ -3,14 +3,14 @@ import Map, { GeolocateControl, Popup, Marker } from "react-map-gl";
 import styled from "styled-components";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { getEvents } from "../store/eventsSlice";
-import { addEventLocale } from "../store/newEventSlice";
+import { addEventLocale } from "../redux/features/newEventSlice";
+import { getLocale } from "../redux/api/getLocaleApi";
+import { getEvents } from "../redux/api/getApi";
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 import { Viewport, NewEvent } from "../interfaces/MyMapInterface";
 
 import EventCard from "./EventCard";
-import NewEventForm from "./NewEventForm";
 import pin from "../icons/pin.png";
 
 const MyImg = styled.img`
@@ -25,9 +25,9 @@ const MyMap = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.events.data);
   const locationInfo = useAppSelector((state) => state.modal.locationInfo);
+  const isPosting = useAppSelector((state) => state.newEvent.isPosting);
 
   const [popupID, setPopupID] = useState<string>("");
-  const [newEvent, setNewEvent] = useState<NewEvent | null>(null);
   const [viewport, setViewport] = useState<Viewport>({
     latitude: 47,
     longitude: 13,
@@ -38,6 +38,7 @@ const MyMap = () => {
     if (locationInfo) {
       const long = e.lngLat.lng;
       const lat = e.lngLat.lat;
+      dispatch(getLocale({ long, lat }));
       dispatch(addEventLocale({ long, lat }));
     } else {
       return;
@@ -46,7 +47,7 @@ const MyMap = () => {
 
   useEffect(() => {
     dispatch(getEvents());
-  }, []);
+  }, [isPosting]);
   return (
     <Map
       initialViewState={viewport}
@@ -91,15 +92,6 @@ const MyMap = () => {
                 />
               </Popup>
             )}
-            {/* {newEvent && (
-              <Popup
-                latitude={newEvent.latitude}
-                longitude={newEvent.longitude}
-                onClose={() => setNewEvent(null)}
-              >
-                <NewEventForm />
-              </Popup>
-            )} */}
           </>
         );
       })}

@@ -6,4 +6,5 @@ export interface NewEvent {
   desc?: string;
   date?: string;
   time?: string;
+  isPosting?: boolean;
 }

@@ -4,7 +4,9 @@ import reset from "styled-reset";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { AnimatePresence } from "framer-motion";
-import { useAppSelector } from "./hooks/reduxHook";
+import { useAppSelector, useAppDispatch } from "./hooks/reduxHook";
+import { createEvent } from "./redux/api/postApi";
+import { getEvents } from "./redux/api/getApi";
 
 import Button from "./components/Button";
 import MyMap from "./components/MyMap";
@@ -23,8 +25,15 @@ body {
 `;
 
 function App() {
+  const dispatch = useAppDispatch();
+
   const modal = useAppSelector((state) => state.modal.modal);
   const locationInfo = useAppSelector((state) => state.modal.locationInfo);
+  const newEvent = useAppSelector((state) => state.newEvent);
+
+  const handleCLick = () => {
+    dispatch(createEvent(newEvent));
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -35,7 +44,9 @@ function App() {
       <AnimatePresence>
         {modal && <LayoutModal>{<NewEventForm />}</LayoutModal>}
       </AnimatePresence>
-      <AnimatePresence>{locationInfo && <LocationInfo />}</AnimatePresence>
+      <AnimatePresence>
+        {locationInfo && <LocationInfo onLocationButton={handleCLick} />}
+      </AnimatePresence>
     </LocalizationProvider>
   );
 }
