@@ -2,21 +2,25 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 import { closeLocationInfo } from "../redux/features/modalSlice";
+import { cancelAddingEvent } from "../redux/features/newEventSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 
-import okIcon from "../icons/ok_icon.svg";
+import okIcon from "../icons/icons8-done.svg";
+import closeIcon from "../icons/icons8-close.svg";
 
 const Div = styled(motion.div)`
   position: absolute;
-  width: 30%;
+
+  width: 600px;
   bottom: 0;
   background-color: white;
-  left: 35%;
+  left: calc(50vw - 300px);
   height: 50px;
   z-index: 3;
   border-radius: 25px 25px 0 0;
 `;
 const Content = styled.div`
+  width: 100%;
   display: flex;
   padding: 5px 10px;
   justify-content: space-between;
@@ -55,9 +59,14 @@ const LocationInfo = (props: Props) => {
   const dispatch = useAppDispatch();
   const locale = useAppSelector((state) => state.locale.locale);
 
-  const handleClick = () => {
+  const handleDoneClick = () => {
     dispatch(closeLocationInfo());
     props.onLocationButton();
+  };
+
+  const handleCloseClick = () => {
+    dispatch(cancelAddingEvent());
+    dispatch(closeLocationInfo());
   };
 
   return (
@@ -74,7 +83,14 @@ const LocationInfo = (props: Props) => {
           readOnly
         />
         <Button
-          onClick={() => handleClick()}
+          onClick={() => handleCloseClick()}
+          whileHover={{ scale: 1.2 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Img src={closeIcon} />
+        </Button>
+        <Button
+          onClick={() => handleDoneClick()}
           whileHover={{ scale: 1.2 }}
           transition={{ duration: 0.3 }}
         >

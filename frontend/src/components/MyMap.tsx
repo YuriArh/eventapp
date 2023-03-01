@@ -20,12 +20,17 @@ const MyImg = styled.img`
   }
 `;
 
+const StyledMap = styled(Map)`
+  position: absolute;
+  right: 0;
+  float: right;
+`;
+
 const MyMap = () => {
   const token: string | undefined = process.env.REACT_APP_MAPBOX_TOKEN;
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.events.data);
   const locationInfo = useAppSelector((state) => state.modal.locationInfo);
-  const isPosting = useAppSelector((state) => state.newEvent.isPosting);
 
   const [popupID, setPopupID] = useState<string>("");
   const [viewport, setViewport] = useState<Viewport>({
@@ -45,15 +50,13 @@ const MyMap = () => {
     }
   };
 
-  useEffect(() => {
-    dispatch(getEvents());
-  }, [isPosting]);
   return (
-    <Map
+    <StyledMap
       initialViewState={viewport}
       style={{
-        width: "100vw",
+        width: "75vw",
         height: "100vh",
+        float: "right",
       }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={token}
@@ -85,17 +88,13 @@ const MyMap = () => {
                 onClose={() => setPopupID("")}
                 style={{}}
               >
-                <EventCard
-                  name={event.name}
-                  desc={event.desc}
-                  time={event.time}
-                />
+                <EventCard eventData={event} />
               </Popup>
             )}
           </>
         );
       })}
-    </Map>
+    </StyledMap>
   );
 };
 

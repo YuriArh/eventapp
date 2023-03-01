@@ -38,8 +38,11 @@ const ContentHead = styled.div`
   justify-content: flex-end;
 `;
 
-const CloseButton = styled.div`
+const CloseButton = styled(motion.button)`
   margin: 5px;
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
 `;
 const ModalContent = styled.div``;
 
@@ -86,7 +89,10 @@ const LayoutModal = (props: LayoutModalProps) => {
       >
         <ContentHead>
           {/* {props.title} */}
-          <CloseButton onClick={() => dispatch(closeModal())}>
+          <CloseButton
+            onClick={() => dispatch(closeModal())}
+            whileHover={{ rotate: 90 }}
+          >
             <Img src={closeIcon} alt="close" />
           </CloseButton>
         </ContentHead>

@@ -4,6 +4,8 @@ import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 // import Calendar from "react-calendar";
 import moment from "moment";
 import { TextField, Box } from "@mui/material";
+import { motion } from "framer-motion";
+
 import { useAppDispatch } from "../hooks/reduxHook";
 import { openLocationInfo } from "../redux/features/modalSlice";
 import { addEventInfo } from "../redux/features/newEventSlice";
@@ -67,7 +69,7 @@ const PickerInput = styled.input`
   outline: none;
 `;
 
-const Button = styled.input`
+const Button = styled(motion.input)`
   background-color: black;
   border-radius: 20px;
   width: 40%;
@@ -148,6 +150,7 @@ const NewEventForm: React.FC = () => {
             dispatch(addEventInfo({ name, desc, date, time }));
             dispatch(openLocationInfo());
           }}
+          whileHover={{ scale: [1, 1.2] }}
           type={"submit"}
           value={"Выберите местоположение ивента"}
         ></Button>

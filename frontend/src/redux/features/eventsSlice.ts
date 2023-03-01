@@ -1,12 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Event from "../../interfaces/EventSliceInterface";
+import { eventsState } from "../../interfaces/EventsInterface";
 import { getEvents } from "../api/getApi";
-
-type eventsState = {
-  data: Event[];
-  isLoading: boolean;
-  hasError: boolean;
-};
 
 const initialState: eventsState = {
   data: [],

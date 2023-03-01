@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
 import reset from "styled-reset";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -13,15 +14,23 @@ import MyMap from "./components/MyMap";
 import LayoutModal from "./components/LayoutModal";
 import NewEventForm from "./components/NewEventForm";
 import LocationInfo from "./components/LocationInfo";
+import Loader from "./components/Loader";
+import EventList from "./components/EventList";
 import "./App.css";
 
 const AppStyle = createGlobalStyle`
 ${reset}
 
-* {font-family: 'Roboto'}
+* { @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap');
+font-family: Roboto !important; box-sizing: border-box;}
 body {
-  overflow: hidden
+  overflow: hidden;
 }
+`;
+
+const AppDiv = styled.div`
+  position: relative;
+  height: 100vh;
 `;
 
 function App() {
@@ -30,24 +39,37 @@ function App() {
   const modal = useAppSelector((state) => state.modal.modal);
   const locationInfo = useAppSelector((state) => state.modal.locationInfo);
   const newEvent = useAppSelector((state) => state.newEvent);
+  const isPosting = useAppSelector((state) => state.newEvent.isPosting);
+  const isLoading = useAppSelector((state) => state.events.isLoading);
+  const data = useAppSelector((state) => state.events.data);
 
   const handleCLick = () => {
     dispatch(createEvent(newEvent));
   };
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
-      <AppStyle />
-      <MyMap />
-      <AnimatePresence>{!modal && !locationInfo && <Button />}</AnimatePresence>
+  useEffect(() => {
+    dispatch(getEvents());
+  }, [isPosting, !isPosting]);
 
-      <AnimatePresence>
-        {modal && <LayoutModal>{<NewEventForm />}</LayoutModal>}
-      </AnimatePresence>
-      <AnimatePresence>
-        {locationInfo && <LocationInfo onLocationButton={handleCLick} />}
-      </AnimatePresence>
-    </LocalizationProvider>
+  return (
+    <AppDiv>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <AppStyle />
+        <MyMap />
+        <EventList data={data} />
+        <AnimatePresence>
+          {!modal && !locationInfo && <Button />}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {modal && <LayoutModal>{<NewEventForm />}</LayoutModal>}
+        </AnimatePresence>
+        <AnimatePresence>
+          {locationInfo && <LocationInfo onLocationButton={handleCLick} />}
+        </AnimatePresence>
+        {(isLoading || isPosting) && <Loader />}
+      </LocalizationProvider>
+    </AppDiv>
   );
 }
 

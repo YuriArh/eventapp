@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import EventProp from "../interfaces/EventCardInterface";
 
-const CardDiv = styled.div`
-  margin: 10px;
+const EventDiv = styled.div`
+  height: 100px;
+  border: 1px solid black;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  padding: 10px;
   h4 {
     margin: 0;
     padding: 0;
@@ -24,14 +24,14 @@ const Time = styled.div``;
 const Label = styled.label`
   width: max-content;
   color: tomato;
-  font-size: 13px;
+  font-size
   border-bottom: 0.5px solid tomato;
   margin: 3px 0;
 `;
 
-const EventCard = (props: EventProp) => {
+const EventItem = (props: EventProp) => {
   return (
-    <CardDiv>
+    <EventDiv>
       <Label>Ивент</Label>
       <h4>{props.eventData.name}</h4>
 
@@ -42,8 +42,8 @@ const EventCard = (props: EventProp) => {
       {props.eventData.time}
       <Label>Дата</Label>
       {props.eventData.date}
-    </CardDiv>
+    </EventDiv>
   );
 };
 
-export default EventCard;
+export default EventItem;

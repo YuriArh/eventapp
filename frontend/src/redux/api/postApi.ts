@@ -10,6 +10,7 @@ export const createEvent = createAsyncThunk(
         "http://localhost:5000/api/event",
         newEvent
       );
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);

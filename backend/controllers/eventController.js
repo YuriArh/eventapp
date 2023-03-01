@@ -15,23 +15,27 @@ class EventController {
         await Event.create(info);
       };
 
-      if (req.files) {
-        const { img } = req.files;
-        let filename = uuid.v4() + ".jpg";
-        img.mv(path.resolve(__dirname, "..", "static", filename));
-        createEvent({
-          eventId: uuid.v4(),
-          name,
-          long,
-          lat,
-          img: filename,
-          desc,
-          time,
-          date,
-        });
-      } else {
-        createEvent({ eventId: uuid.v4(), name, long, lat, desc, time, date });
+      if (!long || !lat) {
+        return next(ApiError.badRequest("не указано местоположение"));
       }
+      createEvent({ eventId: uuid.v4(), name, long, lat, desc, time, date });
+      // if (req.files) {
+      //   const { img } = req.files;
+      //   let filename = uuid.v4() + ".jpg";
+      //   img.mv(path.resolve(__dirname, "..", "static", filename));
+      //   createEvent({
+      //     eventId: uuid.v4(),
+      //     name,
+      //     long,
+      //     lat,
+      //     img: filename,
+      //     desc,
+      //     time,
+      //     date,
+      //   });
+      // } else {
+
+      // }
 
       // const event = await Event.create({ name, long, lat, img: filename});
 
@@ -50,7 +54,6 @@ class EventController {
         //     eventId: event.id,
         //   })
         // );
-
         // if (req.files) {
         //   const { img } = req.files;
 
